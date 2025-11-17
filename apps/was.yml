@@ -43,6 +43,8 @@ metadata:
   labels:
     app: my-was
 spec:
+  selector:
+    app: my-was
   ports:
   - port: 8080
     targetPort: 8080
