@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: was-cm
+  name: tom-configmap
   namespace: default
 
 data: 
