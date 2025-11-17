@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-was
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-was
+
+  template:
+    metadata:
+      labels:
+        app: my-was
+
+    spec:
+      containers:
+      - name: my-was-con
+        image: 61.254.18.30:5000/tomcat:latest
+        volumeMounts:
+        - name: my-was-jar
+          mountPath: /usr/local/tomcat/lib/mysql-connector-java-8.0.23.jar
+          subPath: mysql-connector-java-8.0.23.jar
+        - name: my-was-jsp
+          mountPath: /usr/local/tomcat/webapps/ROOT/index.jsp
+          subPath: index.jsp
+      volumes:
+      - name: my-was-jar
+        persistentVolumeClaim:
+          claimName: my-was-pvc
+      - name: my-was-jsp
+        configMap:
+          name: tom-configmap
+          items:
+          - key: index.jsp
+            path: index.jsp
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-was-svc
+  labels:
+    app: my-was
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080

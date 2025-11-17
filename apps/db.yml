@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-db
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-db
+
+  template:
+    metadata:
+      labels:
+        app: my-db
+
+    spec:
+      containers:
+      - name: my-db-con
+        image: 61.254.18.30:5000/mysql:latest
+        envFrom:
+        - secretRef:
+            name: db-sec
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-db-srv
+spec:
+  selector:
+    app: my-db
+  ports:
+  - port: 3306
+    targetPort: 3306
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-sec
+type: Opaque
+stringData:
+  MYSQL_ROOT_PASSWORD: '1234'
+  MYSQL_DATABASE: mydb
+  MYSQL_USER: dbuser
+  MYSQL_PASSWORD: '1234'

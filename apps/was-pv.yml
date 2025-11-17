@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: was-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+  - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    path: /shared/lib
+    server: 172.16.101.10
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-was-pvc
+  labels:
+    app: my-was
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
